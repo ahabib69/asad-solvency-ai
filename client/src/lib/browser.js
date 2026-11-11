@@ -3,7 +3,7 @@ export const NEW_TAB = 'asad://newtab';
 
 export const QUICK_LINKS = [
   { name: 'Google', url: 'https://www.google.com/', host: 'google.com' },
-  { name: 'YouTube', url: 'https://www.youtube.com/', host: 'youtube.com' },
+  { name: 'ASADCORE', url: 'https://asadcore-six.vercel.app/', host: 'asadcore-six.vercel.app' },
   { name: 'Wikipedia', url: 'https://en.wikipedia.org/wiki/Main_Page', host: 'wikipedia.org' },
 ];
 

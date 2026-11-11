@@ -1,4 +1,4 @@
-import express from 'express';
+﻿import express from 'express';
 import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -39,7 +39,7 @@ const aiLimiter = (req, res, next) => {
   const nowMin = Math.floor(Date.now() / 60000);
   const entry = hits.get(key);
   if (!entry || entry.min !== nowMin) hits.set(key, { min: nowMin, n: 1 });
-  else if (++entry.n > config.rateLimitPerMin) return res.status(429).json({ error: 'Too many requests — please slow down for a minute.', code: 'rate_limited' });
+  else if (++entry.n > config.rateLimitPerMin) return res.status(429).json({ error: 'Too many requests â€” please slow down for a minute.', code: 'rate_limited' });
   next();
 };
 app.use(['/api/chat', '/api/live', '/api/images/generate', '/api/images/enhance', '/api/tts', '/api/transcribe'], aiLimiter);
@@ -69,11 +69,13 @@ app.use((err, _req, res, _next) => {
   res.status(status).json({ error: err.message || 'Server error', code: err.code || 'server_error' });
 });
 
-app.listen(config.port, config.host, () => {
+if (!process.env.VERCEL) app.listen(config.port, config.host, () => {
   const s = status();
-  console.log(`\n  ASAD SOLVENCY API  →  http://${config.host === '0.0.0.0' ? 'localhost' : config.host}:${config.port}`);
-  console.log(`  AI chat ........ ${s.llm.configured ? '✔ ' + s.llm.model + ' @ ' + s.llm.provider : '✖ not configured (set OPENAI_API_KEY)'}`);
-  console.log(`  Images ......... ${s.images.configured ? '✔ ' + s.images.provider + ' / ' + s.images.model : '✖ not configured'}`);
-  console.log(`  Neural voice ... ${s.voice.tts ? '✔ ' + s.voice.ttsModel : '✖ (browser voice fallback active)'}`);
-  console.log(`  4K upscale ..... ${s.images.upscale4k ? '✔ Stability AI' : '✖ (optional: STABILITY_API_KEY)'}\n`);
+  console.log(`\n  ASAD SOLVENCY API  â†’  http://${config.host === '0.0.0.0' ? 'localhost' : config.host}:${config.port}`);
+  console.log(`  AI chat ........ ${s.llm.configured ? 'âœ” ' + s.llm.model + ' @ ' + s.llm.provider : 'âœ– not configured (set OPENAI_API_KEY)'}`);
+  console.log(`  Images ......... ${s.images.configured ? 'âœ” ' + s.images.provider + ' / ' + s.images.model : 'âœ– not configured'}`);
+  console.log(`  Neural voice ... ${s.voice.tts ? 'âœ” ' + s.voice.ttsModel : 'âœ– (browser voice fallback active)'}`);
+  console.log(`  4K upscale ..... ${s.images.upscale4k ? 'âœ” Stability AI' : 'âœ– (optional: STABILITY_API_KEY)'}\n`);
 });
+
+export default app;

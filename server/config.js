@@ -1,4 +1,4 @@
-// Centralised, server-only configuration. API keys NEVER leave the server.
+﻿// Centralised, server-only configuration. API keys NEVER leave the server.
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'node:url';
 
@@ -13,7 +13,7 @@ export const config = {
   host: env('HOST', '0.0.0.0'),
   isProd: env('NODE_ENV') === 'production',
   corsOrigin: env('CORS_ORIGIN'),
-  dataDir: env('DATA_DIR', fileURLToPath(new URL('./data/', import.meta.url))),
+  dataDir: env('DATA_DIR', process.env.VERCEL ? '/tmp/asad-data' : fileURLToPath(new URL('./data/', import.meta.url))),
 
   // ---- Conversational AI (any OpenAI-compatible Chat Completions API) ----
   llm: {

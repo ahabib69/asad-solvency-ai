@@ -6,3 +6,6 @@ server/data/images/*
 !server/data/images/.gitkeep
 *.log
 .DS_Store
+
+.vercel
+.env*

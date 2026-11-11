@@ -1,4 +1,4 @@
-﻿import { ABOUT_ASAD } from './about.js';
+import { ABOUT_ASAD } from './about.js';
 // The "brain" of Asad Solvency. All system prompts live here so they can be tuned in one place.
 
 const TONES = {

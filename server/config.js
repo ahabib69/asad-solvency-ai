@@ -1,4 +1,4 @@
-﻿// Centralised, server-only configuration. API keys NEVER leave the server.
+// Centralised, server-only configuration. API keys NEVER leave the server.
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'node:url';
 

@@ -1,4 +1,4 @@
-﻿// Facts the AI knows about its creator. Edit freely, then restart the server.
+// Facts the AI knows about its creator. Edit freely, then restart the server.
 export const ABOUT_ASAD = `
 ABOUT YOUR CREATOR (answer from this whenever someone asks who Asad is, who made you, or what he does)
 - Full name: Md Asad Habibun Nabi, usually just "Asad". He is the creator of ASAD SOLVENCY AI (this app).

@@ -8,7 +8,7 @@ const DEFAULT_SETTINGS = {
   language: 'auto',
   theme: 'dark',           // dark | light
   reduceMotion: false,
-  persona: 'character',    // character | robot (Live AI avatar)
+  personaMode: 'robot',    // character | robot (Live AI avatar)
   voiceEngine: 'auto',     // auto | openai | browser
   openaiVoice: 'nova',
   browserVoice: '',        // voiceURI

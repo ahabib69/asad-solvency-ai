@@ -129,8 +129,8 @@ export default function SettingsPage() {
             </label>
             <label>Live AI avatar
               <div className="seg">
-                <button className={settings.persona !== 'robot' ? 'on' : ''} onClick={() => updateSettings({ persona: 'character' })}>Character</button>
-                <button className={settings.persona === 'robot' ? 'on' : ''} onClick={() => updateSettings({ persona: 'robot' })}>Neon robot</button>
+                <button className={settings.personaMode === 'character' ? 'on' : ''} onClick={() => updateSettings({ personaMode: 'character' })}>Character</button>
+                <button className={settings.personaMode !== 'character' ? 'on' : ''} onClick={() => updateSettings({ personaMode: 'robot' })}>Neon robot</button>
               </div>
             </label>
             <label className="check"><input type="checkbox" checked={settings.reduceMotion} onChange={(e) => updateSettings({ reduceMotion: e.target.checked })} /> Reduce motion &amp; animations</label>

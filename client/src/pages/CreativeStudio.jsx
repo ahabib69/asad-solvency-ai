@@ -90,10 +90,44 @@ export default function CreativeStudio() {
     finally { setEnhancing(false); }
   };
 
+  // Free mode: enlarge to 4K inside the browser (works even when the server has forgotten the image) and download it.
+  const upscaleInBrowser = async () => {
+    const src = await new Promise((resolve, reject) => {
+      const im = new Image();
+      im.onload = () => resolve(im);
+      im.onerror = () => reject(new Error('Could not load the image. Generate it again and upscale right away.'));
+      im.src = current.url;
+    });
+    const long = Math.max(src.naturalWidth, src.naturalHeight);
+    const scale = Math.min(4, Math.max(1, 3840 / long));
+    const w = Math.round(src.naturalWidth * scale);
+    const h = Math.round(src.naturalHeight * scale);
+    let cur = src, cw = src.naturalWidth, ch = src.naturalHeight;
+    while (cw < w) { // grow in 2x steps for a smoother result
+      const nw = Math.min(w, cw * 2), nh = Math.min(h, ch * 2);
+      const c = document.createElement('canvas');
+      c.width = nw; c.height = nh;
+      const ctx = c.getContext('2d');
+      ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(cur, 0, 0, nw, nh);
+      cur = c; cw = nw; ch = nh;
+    }
+    const blob = await new Promise((resolve) => cur.toBlob(resolve, 'image/jpeg', 0.93));
+    if (!blob) throw new Error('Your browser could not create the 4K image.');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `asad-solvency-4k-${current.id}.jpg`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+  };
+
   const upscale = async () => {
     if (!current) return;
     setUpscaling(true);
-    try { const img = await api.upscaleImage(current.id); setCurrent(img); setGallery((g) => [img, ...g]); toast('Upscaled to 4K', 'success'); }
+    try {
+      if (status?.images?.upscaleMode !== 'ai') { await upscaleInBrowser(); toast('4K image downloaded', 'success'); return; }
+      const img = await api.upscaleImage(current.id); setCurrent(img); setGallery((g) => [img, ...g]); toast('Upscaled to 4K', 'success');
+    }
     catch (e) { toast(e.message, 'error', 7000); }
     finally { setUpscaling(false); }
   };

@@ -5,6 +5,6 @@
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api" },
     { "source": "/generated/(.*)", "destination": "/api" },
-    { "source": "/((?!api/|generated/|assets/).*)", "destination": "/index.html" }
+    { "source": "/((?!api/|generated/|assets/|robots\\.txt|sitemap\\.xml|favicon\\.svg).*)", "destination": "/index.html" }
   ]
 }

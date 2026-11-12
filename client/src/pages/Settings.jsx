@@ -127,6 +127,12 @@ export default function SettingsPage() {
                 <button className={settings.theme === 'light' ? 'on' : ''} onClick={() => updateSettings({ theme: 'light' })}>Light</button>
               </div>
             </label>
+            <label>Live AI avatar
+              <div className="seg">
+                <button className={settings.persona !== 'robot' ? 'on' : ''} onClick={() => updateSettings({ persona: 'character' })}>Character</button>
+                <button className={settings.persona === 'robot' ? 'on' : ''} onClick={() => updateSettings({ persona: 'robot' })}>Neon robot</button>
+              </div>
+            </label>
             <label className="check"><input type="checkbox" checked={settings.reduceMotion} onChange={(e) => updateSettings({ reduceMotion: e.target.checked })} /> Reduce motion &amp; animations</label>
             <label className="check"><input type="checkbox" checked={settings.showLivePanel} onChange={(e) => updateSettings({ showLivePanel: e.target.checked })} /> Show Live AI side panel</label>
             <label className="check"><input type="checkbox" checked={settings.sidebarCollapsed} onChange={(e) => updateSettings({ sidebarCollapsed: e.target.checked })} /> Compact sidebar</label>

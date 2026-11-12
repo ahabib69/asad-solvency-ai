@@ -113,3 +113,38 @@
   .mic-btn { width: 70px; height: 70px; margin: 0 2px; }
   .end-btn { width: 46px; height: 46px; }
 }
+
+/* ---- SOL-X neon robot: state colours ---- */
+.persona { --neon: #00E5FF; --neon-soft: #A5F8FF; }
+.persona.st-listening { --neon: #35FFA0; --neon-soft: #C2FFE3; }
+.persona.st-thinking { --neon: #C77DFF; --neon-soft: #EBD3FF; }
+.persona.st-speaking { --neon: #FF3DE0; --neon-soft: #FFC7F6; }
+.persona.st-idle.emo-concerned { --neon: #FFB020; --neon-soft: #FFE2A0; }
+.persona .persona-ring { border-color: color-mix(in srgb, var(--neon) 60%, transparent); }
+.persona-3d { filter: drop-shadow(0 30px 40px rgba(0,0,0,.55)) drop-shadow(0 0 36px color-mix(in srgb, var(--neon) 28%, transparent)); }
+.persona.compact .persona-3d { filter: drop-shadow(0 0 30px color-mix(in srgb, var(--neon) 35%, transparent)); }
+.persona-orbit i:nth-child(2) { background: var(--neon); box-shadow: 0 0 14px var(--neon); }
+.persona .antenna-tip { animation: antenna 1.6s ease-in-out infinite; transform-origin: 200px 27px; }
+@keyframes antenna { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .45; transform: scale(.75); } }
+.persona .visor-scan { animation: vscan 3.4s linear infinite; }
+.persona.st-thinking .visor-scan { animation-duration: 1.1s; }
+@keyframes vscan { from { transform: translateY(0); } to { transform: translateY(156px); } }
+.persona.st-thinking .antenna-tip { animation-duration: .5s; }
+
+/* ---- Living portrait character ---- */
+.persona.character { --neon: #FF3B3B; --neon-soft: #FFB3A6; --cp-rim: #FF3B3B; }
+.persona.character.st-listening { --neon: #35E8FF; --neon-soft: #C2F6FF; --cp-rim: #35E8FF; }
+.persona.character.st-thinking { --neon: #C77DFF; --neon-soft: #EBD3FF; --cp-rim: #C77DFF; }
+.persona.character.st-speaking { --neon: #FF8A3B; --neon-soft: #FFD2A8; --cp-rim: #FF8A3B; }
+.persona.character .persona-3d { filter: drop-shadow(0 26px 36px rgba(0,0,0,.6)) drop-shadow(0 0 34px color-mix(in srgb, var(--cp-rim) 38%, transparent)); }
+.cp-frame { position: relative; width: 100%; height: 100%; border-radius: 22px; overflow: hidden; background: #050208; border: 2px solid color-mix(in srgb, var(--cp-rim) 70%, transparent); box-shadow: inset 0 0 40px rgba(0,0,0,.7), 0 0 24px color-mix(in srgb, var(--cp-rim) 45%, transparent); transition: border-color .4s, box-shadow .4s; }
+.cp-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 54% 40%; transform-origin: 55% 45%; user-select: none; -webkit-user-drag: none; will-change: transform; }
+.cp-glow { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; background: radial-gradient(ellipse at 55% 38%, color-mix(in srgb, var(--cp-rim) 55%, transparent) 0%, rgba(255, 90, 40, .12) 38%, transparent 68%); opacity: .4; }
+.cp-vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 50% 45%, transparent 52%, rgba(0, 0, 0, .65) 100%), linear-gradient(180deg, transparent 70%, rgba(0, 0, 0, .55)); }
+.cp-embers { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.cp-embers i { position: absolute; bottom: -8px; border-radius: 50%; background: #ffb066; box-shadow: 0 0 8px 2px rgba(255, 120, 40, .9); opacity: 0; animation: ember 6s linear infinite; }
+@keyframes ember { 0% { transform: translate(0, 0); opacity: 0; } 12% { opacity: .95; } 100% { transform: translate(24px, -420px); opacity: 0; } }
+.cp-wave { position: absolute; left: 0; right: 0; bottom: 14px; display: flex; align-items: flex-end; justify-content: center; gap: 4px; height: 34px; pointer-events: none; }
+.cp-wave i { width: 4px; height: 3px; border-radius: 2px; background: var(--neon-soft); box-shadow: 0 0 10px var(--neon); }
+.reduce-motion .cp-embers i { animation: none; opacity: 0; }
+.persona.character.compact .cp-frame { border-radius: 16px; }

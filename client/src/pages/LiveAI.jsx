@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Mic, MicOff, Volume2, VolumeX, Keyboard, MessagesSquare, Settings2, PhoneOff, SendHorizontal, X, Loader2, Sparkles } from 'lucide-react';
-import RobotPersona from '../components/live/RobotPersona.jsx';
+import Persona from '../components/live/Persona.jsx';
 import ParticleField from '../components/live/ParticleField.jsx';
 import ConfigNotice from '../components/ui/ConfigNotice.jsx';
 import { useApp } from '../context/AppContext.jsx';
@@ -212,7 +212,7 @@ export default function LiveAI() {
       {notConfigured && <div className="live-notice"><ConfigNotice compact title="AI brain not connected">Voice and the avatar work, but replies need <code>OPENAI_API_KEY</code> (or <code>LLM_API_KEY</code>) in <code>.env</code>. </ConfigNotice></div>}
 
       <div className="live-stage">
-        <RobotPersona size={size} state={state} emotion={emotion} materialize={materialized}
+        <Persona size={size} state={state} emotion={emotion} materialize={materialized}
           getLevel={() => voice.getLevel()} getMicLevel={() => speech.levelRef.current} />
         {!materialized && !needsTap && <div className="materializing">Initialising companion…</div>}
       </div>

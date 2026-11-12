@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { AudioLines, Plus, Volume2, VolumeX, Mic, Phone, Settings } from 'lucide-react';
 import { useApp } from '../../context/AppContext.jsx';
-import RobotPersona from '../live/RobotPersona.jsx';
+import Persona from '../live/Persona.jsx';
 import { LogoMark } from '../ui/Logo.jsx';
 import { LIVE_GREETING } from '../../lib/data.js';
 
@@ -21,7 +21,7 @@ export default function LivePanel() {
       <div className="lp-stage">
         <img src="/assets/hero-galaxy.jpg" alt="" className="lp-bg" />
         <button className="lp-persona" onClick={() => navigate('/live')} aria-label="Open Live AI">
-          <RobotPersona size={220} compact state="idle" emotion="happy" />
+          <Persona size={220} compact state="idle" emotion="happy" />
         </button>
         <div className="lp-bubble glass">{LIVE_GREETING.replace('Welcome', '\nWelcome')}</div>
       </div>

@@ -27,7 +27,7 @@ export const config = {
 
   // ---- Image generation ----
   images: {
-    provider: env('IMAGE_PROVIDER', 'openai'), // 'openai' | 'stability'
+    provider: env('IMAGE_PROVIDER', 'openai'), // 'openai' | 'stability' | 'free'
     openaiKey,
     openaiBaseUrl: env('OPENAI_BASE_URL', 'https://api.openai.com/v1').replace(/\/+$/, ''),
     openaiModel: env('OPENAI_IMAGE_MODEL', 'gpt-image-1'),
@@ -57,10 +57,12 @@ export const status = () => ({
   images: {
     provider: config.images.provider,
     configured:
-      config.images.provider === 'stability'
-        ? Boolean(config.images.stabilityKey)
-        : Boolean(config.images.openaiKey),
-    model: config.images.provider === 'stability' ? `stable-image-${config.images.stabilityModel}` : config.images.openaiModel,
+      config.images.provider === 'free'
+        ? true
+        : config.images.provider === 'stability'
+          ? Boolean(config.images.stabilityKey)
+          : Boolean(config.images.openaiKey),
+    model: config.images.provider === 'free' ? 'flux (free)' : config.images.provider === 'stability' ? `stable-image-${config.images.stabilityModel}` : config.images.openaiModel,
     upscale4k: Boolean(config.images.stabilityKey),
   },
   voice: {

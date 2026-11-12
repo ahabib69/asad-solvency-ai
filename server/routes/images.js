@@ -98,6 +98,31 @@ async function stabilityGenerate({ prompt, aspect, refs, negative }) {
   return { file: saveBuffer(buf, 'png'), size: aspect };
 }
 
+// ---- Free provider: Pollinations (no API key, no billing; anonymous tier is rate-limited) ----
+const FREE_SIZES = { '1:1': [1024, 1024], '2:3': [768, 1152], '4:5': [832, 1040], '5:4': [1040, 832], '3:2': [1152, 768], '9:16': [720, 1280], '16:9': [1280, 720], '21:9': [1344, 576], '9:21': [576, 1344] };
+
+async function freeGenerate({ prompt, aspect, refs }) {
+  if (refs.length) throw new ProviderError('Reference photos are not supported by the free image service. Remove the photo, or use the OpenAI provider.', 400, 'unsupported');
+  const [w, h] = FREE_SIZES[aspect] || [1024, 1024];
+  const seed = Math.floor(Math.random() * 1e9);
+  const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt.slice(0, 1500))}?width=${w}&height=${h}&model=flux&nologo=true&seed=${seed}`;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 55000);
+  let res;
+  try {
+    res = await fetch(url, { signal: controller.signal, headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36' } });
+  } catch {
+    throw new ProviderError('The free image service did not respond in time. Try again in a moment.', 504, 'timeout');
+  } finally { clearTimeout(timer); }
+  if (res.status === 429) throw new ProviderError('The free image service is busy (it allows about one image every 15 seconds). Wait a few seconds and try again.', 429, 'rate_limit');
+  if (!res.ok) throw await readProviderError(res, 'Free image service');
+  const ct = res.headers.get('content-type') || '';
+  if (!ct.startsWith('image/')) throw new ProviderError('The free image service did not return an image. Try again in a moment.', 502, 'bad_response');
+  const buf = Buffer.from(await res.arrayBuffer());
+  const ext = /png/.test(ct) ? 'png' : /webp/.test(ct) ? 'webp' : 'jpg';
+  return { file: saveBuffer(buf, ext), size: aspect };
+}
+
 router.get('/images', (_req, res) => res.json(store.listImages()));
 
 router.delete('/images/:id', (req, res) => res.json({ ok: store.deleteImage(req.params.id) }));
@@ -111,15 +136,17 @@ router.post('/images/generate', upload.array('references', 4), async (req, res, 
     const quality = req.body.quality === 'high' ? 'high' : 'standard';
     const refs = req.files || [];
     const preserveIdentity = refs.length > 0 && req.body.preserveIdentity !== 'false';
-    const provider = config.images.provider === 'stability' ? 'stability' : 'openai';
+    const provider = ['stability', 'free'].includes(config.images.provider) ? config.images.provider : 'openai';
 
     let prompt = `${userPrompt}\n\nStyle: ${STYLES[style]}`.trim();
     if (preserveIdentity) prompt += IDENTITY_CLAUSE;
     if (aspect && !['1:1'].includes(aspect)) prompt += ` Compose for a ${aspect} frame.`;
 
-    const out = provider === 'stability'
-      ? await stabilityGenerate({ prompt, aspect, refs, negative: req.body.negative })
-      : await openaiGenerate({ prompt, aspect, quality, refs, preserveIdentity });
+    const out = provider === 'free'
+      ? await freeGenerate({ prompt, aspect, refs })
+      : provider === 'stability'
+        ? await stabilityGenerate({ prompt, aspect, refs, negative: req.body.negative })
+        : await openaiGenerate({ prompt, aspect, quality, refs, preserveIdentity });
 
     const img = store.addImage({ file: out.file, url: `/generated/${out.file}`, prompt: userPrompt, style, aspect, quality, provider, size: out.size, edited: refs.length > 0 });
     res.json(img);

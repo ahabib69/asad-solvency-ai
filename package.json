@@ -1,7 +1,7 @@
 {
   "name": "asad-solvency-ai",
   "version": "1.0.0",
-  "description": "ASAD SOLVENCY \u2014 Every Problem Has A Way Forward. AI problem solver, Live AI companion, Creative Studio and productivity coach.",
+  "description": "ASAD SOLVENCY — Every Problem Has A Way Forward. AI problem solver, Live AI companion, Creative Studio and productivity coach.",
   "private": true,
   "type": "module",
   "engines": {
@@ -21,7 +21,8 @@
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.3",

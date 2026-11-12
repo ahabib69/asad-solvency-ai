@@ -202,7 +202,7 @@ export default function CreativeStudio() {
           {current && !busy && (
             <div className="canvas-actions">
               <a className="btn btn-primary btn-sm" href={current.url} download={`asad-solvency-${current.id}.png`}><Download size={15} /> Download</a>
-              <button className="btn btn-ghost btn-sm" onClick={upscale} disabled={upscaling || current.size === '4K'} title={status?.images?.upscale4k ? '' : 'Requires STABILITY_API_KEY'}>
+              <button className="btn btn-ghost btn-sm" onClick={upscale} disabled={upscaling || current.size === '4K'} title={status?.images?.upscaleMode === 'ai' ? '' : 'Free enlarger: makes the image bigger, does not add AI detail'}>
                 {upscaling ? <Loader2 size={15} className="spin" /> : <Maximize2 size={15} />} {current.size === '4K' ? '4K ✓' : 'Upscale to 4K'}
               </button>
               <button className="btn btn-ghost btn-sm" onClick={() => useAsReference(current)}><ImagePlus size={15} /> Use as reference</button>

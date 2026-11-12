@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
+import sharp from 'sharp';
 import fs from 'node:fs';
 import path from 'node:path';
 import * as store from '../lib/store.js';
@@ -156,10 +157,24 @@ router.post('/images/generate', upload.array('references', 4), async (req, res, 
 // 4K upscale via Stability AI "conservative" upscaler (outputs up to 4K, preserves detail).
 router.post('/images/:id/upscale', async (req, res, next) => {
   try {
-    if (!config.images.stabilityKey) throw new ProviderError('4K upscaling needs STABILITY_API_KEY in .env (Stability AI upscaler).', 503, 'not_configured');
     const img = store.getImage(req.params.id);
-    if (!img) return res.status(404).json({ error: 'Image not found' });
+    if (!img) return res.status(404).json({ error: 'Image not found. On the free hosting plan, old images can disappear: generate it again and upscale right away.' });
     const buf = fs.readFileSync(path.join(store.IMAGES_DIR, img.file));
+
+    // No Stability key: free built-in enlarger (sharp). Makes the image 4K-sized, but does not add new AI detail.
+    if (!config.images.stabilityKey) {
+      const meta = await sharp(buf).metadata();
+      const longSide = Math.max(meta.width || 1, meta.height || 1);
+      const scale = Math.min(4, Math.max(1, 3840 / longSide));
+      const out = await sharp(buf)
+        .resize({ width: Math.round((meta.width || 1) * scale), height: Math.round((meta.height || 1) * scale), kernel: 'lanczos3' })
+        .sharpen({ sigma: 0.8 })
+        .jpeg({ quality: 92, mozjpeg: true })
+        .toBuffer();
+      const file = saveBuffer(out, 'jpg');
+      const up = store.addImage({ file, url: `/generated/${file}`, prompt: img.prompt, style: img.style, aspect: img.aspect, provider: 'basic-upscale', size: '4K', upscaledFrom: img.id });
+      return res.json(up);
+    }
     const fd = new FormData();
     fd.append('image', new Blob([buf], { type: 'image/png' }), 'image.png');
     fd.append('prompt', img.prompt.slice(0, 1000));

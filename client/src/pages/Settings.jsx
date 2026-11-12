@@ -144,7 +144,7 @@ export default function SettingsPage() {
               <Status ok={status.llm.configured} label="Conversational AI" detail={status.llm.configured ? `${status.llm.model} via ${status.llm.provider}` : 'Set OPENAI_API_KEY or LLM_API_KEY in .env'} />
               <Status ok={status.images.configured} label="Image generation" detail={status.images.configured ? `${status.images.provider} · ${status.images.model}` : status.images.provider === 'stability' ? 'Set STABILITY_API_KEY in .env' : 'Set OPENAI_API_KEY in .env'} />
               <Status ok={status.voice.tts} label="Neural voice & Whisper STT" detail={status.voice.tts ? status.voice.ttsModel : 'Optional — browser voice is used instead'} />
-              <Status ok={status.images.upscale4k} label="4K upscaling" detail={status.images.upscale4k ? 'Stability AI conservative upscaler' : 'Optional — set STABILITY_API_KEY'} />
+              <Status ok={status.images.upscale4k} label="4K upscaling" detail={status.images.upscaleMode === 'ai' ? 'Stability AI conservative upscaler' : 'Built-in enlarger (no AI detail added). Add STABILITY_API_KEY for AI upscaling'} />
               <Status ok={!!(window.SpeechRecognition || window.webkitSpeechRecognition)} label="Browser speech recognition" detail={(window.SpeechRecognition || window.webkitSpeechRecognition) ? 'Available in this browser' : 'Not available — Whisper fallback used if configured'} />
             </div>
           )}

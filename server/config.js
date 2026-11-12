@@ -63,7 +63,8 @@ export const status = () => ({
           ? Boolean(config.images.stabilityKey)
           : Boolean(config.images.openaiKey),
     model: config.images.provider === 'free' ? 'flux (free)' : config.images.provider === 'stability' ? `stable-image-${config.images.stabilityModel}` : config.images.openaiModel,
-    upscale4k: Boolean(config.images.stabilityKey),
+    upscale4k: true,
+    upscaleMode: config.images.stabilityKey ? 'ai' : 'basic',
   },
   voice: {
     tts: Boolean(config.voice.openaiKey),

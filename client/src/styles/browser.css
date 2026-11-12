@@ -114,3 +114,21 @@
   .bw-go { padding: 0 12px; }
 }
 @media (max-width: 520px) { .bw-tiles { gap: 8px; } .bw-tile { width: 92px; } }
+
+/* ---- downloadable media bar ---- */
+.bw-media { margin: 0 0 8px; padding: 8px 12px; border: 1px solid rgba(124, 92, 255, .45); border-radius: 12px; background: linear-gradient(90deg, rgba(124, 92, 255, .16), rgba(80, 140, 255, .08)); }
+.bw-media-main { display: flex; align-items: center; gap: 10px; }
+.bw-media-ico { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: rgba(124, 92, 255, .25); flex: none; }
+.bw-media-text { display: flex; flex-direction: column; min-width: 0; flex: 1; font-size: 13px; }
+.bw-media-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bw-media-list { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+.bw-media-row { display: flex; align-items: center; gap: 10px; }
+.bw-media-row .bw-media-name { flex: 1; min-width: 0; }
+@media (max-width: 600px) { .bw-media-main { flex-wrap: wrap; } }
+
+/* ---- browser = full screen (sidebar + top bar hidden) ---- */
+.app-shell.browser-focus, .app-shell.browser-focus.sb-collapsed, .app-shell.browser-focus.with-panel { grid-template-columns: minmax(0, 1fr) !important; }
+.app-shell.browser-focus .main-scroll.full-bleed { padding: 0; }
+.app-shell.browser-focus .bw { border-radius: 0; border: 0; box-shadow: none; }
+.bw-exit { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; margin: 0 8px 2px 2px; border-radius: 10px; background: rgba(124, 92, 255, .22); border: 1px solid rgba(124, 92, 255, .45); cursor: pointer; transition: transform .15s, background .15s; }
+.bw-exit:hover { background: rgba(124, 92, 255, .4); transform: scale(1.06); }

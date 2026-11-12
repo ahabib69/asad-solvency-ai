@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ArrowLeft, ArrowRight, RotateCw, X, Home, Plus, Lock, Globe, ExternalLink, Search, ShieldAlert, Loader2, Info, Unlock } from 'lucide-react';
+import { useNavigate as useRouterNavigate } from 'react-router-dom';
+import { ArrowLeft, ArrowRight, RotateCw, X, Home, Plus, Lock, Globe, ExternalLink, Search, ShieldAlert, Loader2, Info, Unlock, Download, Film, Music } from 'lucide-react';
 import { LogoMark } from '../components/ui/Logo.jsx';
 import { NEW_TAB, QUICK_LINKS, toUrl, embedUrl, hostOf, faviconFor, displayUrl, googleSearch } from '../lib/browser.js';
 
@@ -31,6 +32,7 @@ function Favicon({ url, size = 16 }) {
 }
 
 export default function WebBrowser() {
+  const goHome = useRouterNavigate();
   const [{ tabs, activeId }, setState] = useState(loadState);
   const [info, setInfo] = useState({});      // embedUrl -> { status, embeddable, reason, title }
   const [loaded, setLoaded] = useState({});  // frameKey -> true once the iframe fired onLoad
@@ -145,6 +147,7 @@ export default function WebBrowser() {
     <div className="bw">
       {/* ---------- Tab strip ---------- */}
       <div className="bw-tabstrip" ref={tabsRef} role="tablist" aria-label="Browser tabs">
+        <button className="bw-exit" onClick={() => goHome('/')} title="Back to ASAD SOLVENCY" aria-label="Back to ASAD SOLVENCY"><LogoMark size={22} /></button>
         {tabs.map((t, i) => {
           const on = t.id === active.id;
           const prevOn = i > 0 && tabs[i - 1].id === active.id;
@@ -200,6 +203,13 @@ export default function WebBrowser() {
         </span>
       </div>
 
+
+      {/* ---------- Downloadable media found on the current page ---------- */}
+      {(() => {
+        const media = info[embedUrl(activeUrl)]?.media || [];
+        return media.length > 0 ? <MediaBar key={activeUrl} media={media} /> : null;
+      })()}
+
       {/* ---------- Viewport (every tab stays mounted so pages keep their state) ---------- */}
       <div className="bw-viewport">
         {tabs.map((t) => {
@@ -231,6 +241,40 @@ export default function WebBrowser() {
           return <div key={t.id} className={`bw-pane ${on ? 'on' : ''}`} aria-hidden={!on}>{body}</div>;
         })}
       </div>
+    </div>
+  );
+}
+
+const fmtSize = (n) => (n > 1048576 ? `${(n / 1048576).toFixed(1)} MB` : n > 1024 ? `${Math.round(n / 1024)} KB` : '');
+const dlHref = (m) => `/api/browser/download?url=${encodeURIComponent(m.url)}&name=${encodeURIComponent(m.name)}`;
+
+function MediaBar({ media }) {
+  const [open, setOpen] = useState(false);
+  const first = media[0];
+  const rest = media.slice(1);
+  const Icon = (m) => (m.kind === 'audio' ? <Music size={15} /> : <Film size={15} />);
+  return (
+    <div className="bw-media">
+      <div className="bw-media-main">
+        <span className="bw-media-ico">{Icon(first)}</span>
+        <span className="bw-media-text">
+          <strong>{media.length > 1 ? `${media.length} downloadable files found` : `Downloadable ${first.kind} found`}</strong>
+          <span className="tiny muted bw-media-name" title={first.name}>{first.name}{first.size ? ` · ${fmtSize(first.size)}` : ''}</span>
+        </span>
+        <a className="btn btn-primary btn-sm" href={dlHref(first)} download={first.name}><Download size={15} /> Download</a>
+        {rest.length > 0 && <button className="btn btn-ghost btn-sm" onClick={() => setOpen((o) => !o)}>{open ? 'Hide' : `+${rest.length} more`}</button>}
+      </div>
+      {open && (
+        <div className="bw-media-list">
+          {rest.map((m) => (
+            <div key={m.url} className="bw-media-row">
+              <span className="bw-media-ico">{Icon(m)}</span>
+              <span className="bw-media-name tiny" title={m.url}>{m.name}</span>
+              <a className="btn btn-ghost btn-sm" href={dlHref(m)} download={m.name}><Download size={14} /> Download</a>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -17,6 +17,11 @@ function Status({ ok, label, detail }) {
   );
 }
 
+const PALETTES = [
+  ['aurora', 'Aurora', '#8B5CF6', '#3B82F6'], ['ocean', 'Ocean', '#14B8A6', '#0EA5E9'], ['sunset', 'Sunset', '#FB7185', '#F59E0B'],
+  ['forest', 'Forest', '#34D399', '#14B8A6'], ['lavender', 'Lavender', '#C4B5FD', '#A5B4FC'], ['midnight', 'Midnight', '#6366F1', '#2563EB'],
+];
+
 export default function SettingsPage() {
   const { settings, updateSettings, status, statusError, refreshStatus, toast, refreshConversations, avatarUrl } = useApp();
   const { hash } = useLocation();
@@ -125,6 +130,22 @@ export default function SettingsPage() {
               <div className="seg">
                 <button className={settings.theme === 'dark' ? 'on' : ''} onClick={() => updateSettings({ theme: 'dark' })}>Midnight</button>
                 <button className={settings.theme === 'light' ? 'on' : ''} onClick={() => updateSettings({ theme: 'light' })}>Light</button>
+              </div>
+            </label>
+            <label>Colour theme
+              <div className="pal-row">
+                {PALETTES.map(([id, name, a, b]) => (
+                  <button key={id} className={`pal-swatch ${(settings.palette || 'aurora') === id ? 'on' : ''}`} onClick={() => updateSettings({ palette: id })} aria-label={name}>
+                    <i style={{ background: `linear-gradient(135deg, ${b}, ${a})`, '--sw-a': a }} />{name}
+                  </button>
+                ))}
+              </div>
+            </label>
+            <label>Background
+              <div className="seg">
+                {[['aurora', 'Aurora glow'], ['stars', 'Stars'], ['plain', 'Plain']].map(([id, name]) => (
+                  <button key={id} className={(settings.bgStyle || 'aurora') === id ? 'on' : ''} onClick={() => updateSettings({ bgStyle: id })}>{name}</button>
+                ))}
               </div>
             </label>
             <label>Live AI avatar

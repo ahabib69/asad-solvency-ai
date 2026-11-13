@@ -1,0 +1,49 @@
+/* ===== ULTRA look: soothing colour palettes + animated background (Settings > Appearance) ===== */
+html[data-palette='aurora']   { --violet:#8B5CF6; --violet-2:#A78BFA; --blue:#3B82F6; --blue-2:#60A5FA; --cyan:#22D3EE; --v-rgb:139,92,246; --b-rgb:59,130,246; --bg:#0B0B1A; --bg-2:#0E0F25; --bg-3:#14153a; --aura-1:rgba(139,92,246,.34); --aura-2:rgba(59,130,246,.26); --aura-3:rgba(236,72,153,.16); }
+html[data-palette='ocean']    { --violet:#14B8A6; --violet-2:#5EEAD4; --blue:#0EA5E9; --blue-2:#7DD3FC; --cyan:#67E8F9; --v-rgb:20,184,166; --b-rgb:14,165,233; --bg:#061218; --bg-2:#081A22; --bg-3:#0C2530; --aura-1:rgba(20,184,166,.30); --aura-2:rgba(14,165,233,.26); --aura-3:rgba(52,211,153,.16); }
+html[data-palette='sunset']   { --violet:#FB7185; --violet-2:#FDA4AF; --blue:#F59E0B; --blue-2:#FCD34D; --cyan:#FDBA74; --v-rgb:251,113,133; --b-rgb:245,158,11; --bg:#170B14; --bg-2:#1E0E1A; --bg-3:#2A1322; --aura-1:rgba(251,113,133,.30); --aura-2:rgba(245,158,11,.20); --aura-3:rgba(192,132,252,.16); }
+html[data-palette='forest']   { --violet:#34D399; --violet-2:#6EE7B7; --blue:#14B8A6; --blue-2:#5EEAD4; --cyan:#A7F3D0; --v-rgb:52,211,153; --b-rgb:20,184,166; --bg:#07130F; --bg-2:#0A1B15; --bg-3:#10281F; --aura-1:rgba(52,211,153,.28); --aura-2:rgba(20,184,166,.24); --aura-3:rgba(163,230,53,.12); }
+html[data-palette='lavender'] { --violet:#C4B5FD; --violet-2:#DDD6FE; --blue:#A5B4FC; --blue-2:#C7D2FE; --cyan:#BAE6FD; --v-rgb:196,181,253; --b-rgb:165,180,252; --bg:#14122A; --bg-2:#1A1736; --bg-3:#231F45; --aura-1:rgba(196,181,253,.26); --aura-2:rgba(165,180,252,.22); --aura-3:rgba(249,168,212,.16); }
+html[data-palette='midnight'] { --violet:#6366F1; --violet-2:#A5B4FC; --blue:#2563EB; --blue-2:#60A5FA; --cyan:#38BDF8; --v-rgb:99,102,241; --b-rgb:37,99,235; --bg:#050816; --bg-2:#070B20; --bg-3:#0B1130; --aura-1:rgba(99,102,241,.30); --aura-2:rgba(37,99,235,.28); --aura-3:rgba(56,189,248,.14); }
+
+/* derived tokens (same for every palette) */
+html[data-palette] {
+  --grad: linear-gradient(135deg, var(--blue) 0%, var(--violet) 100%);
+  --grad-soft: linear-gradient(135deg, rgba(var(--b-rgb), .18), rgba(var(--v-rgb), .18));
+  --glow-v: 0 0 0 1px rgba(var(--v-rgb), .35), 0 8px 32px -8px rgba(var(--v-rgb), .45);
+  --glow-b: 0 0 0 1px rgba(var(--b-rgb), .35), 0 8px 32px -8px rgba(var(--b-rgb), .45);
+  --border: rgba(var(--v-rgb), .2);
+  --surface: color-mix(in srgb, var(--bg-3) 62%, transparent);
+  --surface-2: color-mix(in srgb, var(--bg-3) 80%, transparent);
+  --surface-solid: var(--bg-3);
+}
+html[data-palette] ::selection { background: rgba(var(--v-rgb), .45); }
+html[data-palette] ::-webkit-scrollbar-thumb { background: rgba(var(--v-rgb), .3); border: 3px solid transparent; background-clip: padding-box; }
+html[data-palette] code { background: rgba(var(--v-rgb), .14); }
+
+/* light theme keeps its own surfaces, palette only tints the accents */
+html[data-palette][data-theme='light'] { --bg:#F6F5FF; --bg-2:#EFEDFB; --bg-3:#E6E3F8; --surface:rgba(255,255,255,.72); --surface-2:rgba(255,255,255,.9); --surface-solid:#fff; --aura-1:rgba(var(--v-rgb), .16); --aura-2:rgba(var(--b-rgb), .12); --aura-3:rgba(236,72,153,.08); }
+
+/* background layers */
+html[data-palette] body { background: var(--bg); }
+html[data-palette] body::before { content: ''; position: fixed; inset: -20%; z-index: -1; pointer-events: none;
+  background: radial-gradient(40% 36% at 18% 24%, var(--aura-1), transparent 70%), radial-gradient(36% 42% at 82% 18%, var(--aura-2), transparent 70%), radial-gradient(46% 40% at 62% 88%, var(--aura-3), transparent 70%);
+  filter: blur(28px); animation: ultra-drift 30s ease-in-out infinite alternate; }
+html[data-palette] body::after { content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .55; animation: ultra-twinkle 7s ease-in-out infinite alternate;
+  background-image: radial-gradient(1px 1px at 20px 30px, #fff, transparent), radial-gradient(1.5px 1.5px at 140px 90px, rgba(255,255,255,.85), transparent), radial-gradient(1px 1px at 310px 200px, #fff, transparent), radial-gradient(1.5px 1.5px at 450px 60px, rgba(255,255,255,.8), transparent), radial-gradient(1px 1px at 90px 260px, rgba(255,255,255,.9), transparent), radial-gradient(1px 1px at 400px 300px, #fff, transparent);
+  background-size: 520px 340px; }
+html[data-palette][data-theme='light'] body::after { display: none; }
+@keyframes ultra-drift { from { transform: translate3d(-2%, -1%, 0) scale(1); } to { transform: translate3d(3%, 2%, 0) scale(1.08); } }
+@keyframes ultra-twinkle { from { opacity: .3; } to { opacity: .65; } }
+html[data-bg='stars'] body::before { animation: none; opacity: .55; }
+html[data-bg='plain'] body::before, html[data-bg='plain'] body::after { display: none; }
+.reduce-motion body::before, .reduce-motion body::after { animation: none !important; }
+
+/* glass sidebar so the background glows through, like the concept */
+html[data-palette]:not([data-theme='light']) .sidebar { background: color-mix(in srgb, var(--bg-2) 72%, transparent); backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur)); border-right-color: rgba(var(--v-rgb), .2); }
+
+/* Settings swatches */
+.pal-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.pal-swatch { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 74px; padding: 8px 4px; border-radius: 14px; border: 1px solid var(--border-2); background: var(--surface); font-size: 12px; color: var(--text-2); }
+.pal-swatch i { width: 36px; height: 36px; border-radius: 50%; box-shadow: 0 0 16px -2px var(--sw-a); }
+.pal-swatch.on { border-color: var(--text); color: var(--text); box-shadow: 0 0 0 2px rgba(255,255,255,.18); }

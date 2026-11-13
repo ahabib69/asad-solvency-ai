@@ -8,6 +8,8 @@ const DEFAULT_SETTINGS = {
   language: 'auto',
   theme: 'dark',           // dark | light
   reduceMotion: false,
+  palette: 'aurora',       // aurora | ocean | sunset | forest | lavender | midnight
+  bgStyle: 'aurora',       // aurora | stars | plain
   personaMode: 'robot',    // character | robot (Live AI avatar)
   voiceEngine: 'auto',     // auto | openai | browser
   openaiVoice: 'nova',
@@ -44,8 +46,10 @@ export function AppProvider({ children }) {
   useEffect(() => { localStorage.setItem('asad.notifications', JSON.stringify(notifications)); }, [notifications]);
   useEffect(() => {
     document.documentElement.dataset.theme = settings.theme;
+    document.documentElement.dataset.palette = settings.palette || 'aurora';
+    document.documentElement.dataset.bg = settings.bgStyle || 'aurora';
     document.documentElement.classList.toggle('reduce-motion', !!settings.reduceMotion);
-  }, [settings.theme, settings.reduceMotion]);
+  }, [settings.theme, settings.reduceMotion, settings.palette, settings.bgStyle]);
   useEffect(() => {
     const mark = () => { interacted.current = true; };
     window.addEventListener('pointerdown', mark, { once: true });

@@ -10,6 +10,7 @@ import './styles/chat.css';
 import './styles/live.css';
 import './styles/pages.css';
 import './styles/browser.css';
+import './styles/ultra.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

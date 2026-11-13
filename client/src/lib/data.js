@@ -29,4 +29,4 @@ export const USEFUL_ACTIONS = [
   { id: 'ten', title: 'Give me a 10-minute productive task', emoji: '⏱️' },
 ];
 
-export const LIVE_GREETING = "Hello there! Welcome to Asad Solvency. I'm here and ready to help. Tell me, what's on your mind today?";
+export const LIVE_GREETING = "Hello buddy! Welcome to Asad Solvency. I'm here and ready to help. Tell me, what's on your mind today?";

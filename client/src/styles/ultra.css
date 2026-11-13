@@ -68,3 +68,31 @@ html[data-palette]:not([data-theme='light']) .sidebar { background: color-mix(in
 .pal-swatch { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 74px; padding: 8px 4px; border-radius: 14px; border: 1px solid var(--border-2); background: var(--surface); font-size: 12px; color: var(--text-2); }
 .pal-swatch i { width: 36px; height: 36px; border-radius: 50%; box-shadow: 0 0 16px -2px var(--sw-a); }
 .pal-swatch.on { border-color: var(--text); color: var(--text); box-shadow: 0 0 0 2px rgba(255,255,255,.18); }
+
+/* ===== Hero couple: living, emotional, blended (heartbeat glow + camera push-in + stardust + palette colour-grade) ===== */
+.hero { --cx: 61%; --cy: 40.5%; }
+.hero-bg { transform-origin: var(--cx) var(--cy); animation: hero-push 36s ease-in-out infinite alternate; }
+@keyframes hero-push { from { transform: scale(1.03) translate(0, 0); } to { transform: scale(1.16) translate(-1.2%, -.6%); } }
+.hero::before, .hero::after { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; transform-origin: var(--cx) var(--cy); }
+.hero-greet, .hero-solver { z-index: 2; }
+/* soft warm heartbeat between the two (lub-dub) */
+.hero::before { mix-blend-mode: screen;
+  background: radial-gradient(circle at var(--cx) var(--cy), rgba(255, 196, 150, .55) 0%, rgba(255, 140, 190, .28) 7%, rgba(var(--v-rgb, 139, 92, 246), .26) 16%, transparent 30%);
+  animation: hero-push 36s ease-in-out infinite alternate, hero-heart 4.6s ease-in-out infinite; }
+@keyframes hero-heart { 0%, 100% { opacity: .35; } 8% { opacity: .9; } 16% { opacity: .5; } 26% { opacity: 1; } 48% { opacity: .38; } }
+/* drifting stardust, three speeds for depth; fades out before the text box */
+.hero::after { opacity: .85; -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 52%, transparent 82%); mask-image: linear-gradient(to bottom, #000 0%, #000 52%, transparent 82%);
+  background-image: radial-gradient(1.6px 1.6px at 30px 40px, rgba(255, 226, 200, .95), transparent), radial-gradient(1.2px 1.2px at 160px 120px, rgba(255, 255, 255, .85), transparent), radial-gradient(2px 2px at 260px 70px, rgba(255, 170, 210, .8), transparent),
+    radial-gradient(1.4px 1.4px at 90px 210px, rgba(190, 170, 255, .9), transparent), radial-gradient(1px 1px at 300px 240px, rgba(255, 255, 255, .8), transparent), radial-gradient(1.8px 1.8px at 210px 300px, rgba(255, 210, 170, .85), transparent);
+  background-size: 340px 340px, 340px 340px, 340px 340px, 480px 480px, 480px 480px, 620px 620px;
+  animation: hero-push 36s ease-in-out infinite alternate, hero-dust 70s linear infinite, hero-twinkle 5s ease-in-out infinite alternate; }
+@keyframes hero-dust { from { background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; } to { background-position: 40px -340px, -30px -340px, 20px -340px, -60px -480px, 50px -480px, 30px -620px; } }
+@keyframes hero-twinkle { from { opacity: .5; } to { opacity: .95; } }
+/* the picture takes the colour of the chosen theme */
+html[data-palette='ocean'] .hero-bg { filter: hue-rotate(-68deg) saturate(1.05); }
+html[data-palette='sunset'] .hero-bg { filter: hue-rotate(105deg) saturate(1.1) brightness(1.05); }
+html[data-palette='forest'] .hero-bg { filter: hue-rotate(-100deg) saturate(1.05); }
+html[data-palette='lavender'] .hero-bg { filter: hue-rotate(12deg) saturate(.85) brightness(1.12); }
+html[data-palette='midnight'] .hero-bg { filter: hue-rotate(-18deg) saturate(1.1); }
+@media (max-width: 700px) { .hero { --cx: 71%; } }
+.reduce-motion .hero-bg, .reduce-motion .hero::before, .reduce-motion .hero::after { animation: none !important; }

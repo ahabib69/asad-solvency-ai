@@ -33,7 +33,7 @@ export default function Home() {
         <div className="hero-greet">
           <img src={avatarUrl} alt="" className="avatar lg" />
           <div>
-            <h1>Hello, {settings.name || 'friend'}! <span className="wave">👋</span></h1>
+            <h1>Hello, buddy! <span className="wave">👋</span></h1>
             <p>Life can get complicated. You don&rsquo;t have to figure everything out alone.</p>
           </div>
         </div>

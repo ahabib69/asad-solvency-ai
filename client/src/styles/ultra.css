@@ -24,20 +24,41 @@ html[data-palette] code { background: rgba(var(--v-rgb), .14); }
 /* light theme keeps its own surfaces, palette only tints the accents */
 html[data-palette][data-theme='light'] { --bg:#F6F5FF; --bg-2:#EFEDFB; --bg-3:#E6E3F8; --surface:rgba(255,255,255,.72); --surface-2:rgba(255,255,255,.9); --surface-solid:#fff; --aura-1:rgba(var(--v-rgb), .16); --aura-2:rgba(var(--b-rgb), .12); --aura-3:rgba(236,72,153,.08); }
 
-/* background layers */
+/* background layers: slow light sweep, aurora, drifting stars, two floating orbs (calm, no filters = light on GPU) */
 html[data-palette] body { background: var(--bg); }
-html[data-palette] body::before { content: ''; position: fixed; inset: -20%; z-index: -1; pointer-events: none;
-  background: radial-gradient(40% 36% at 18% 24%, var(--aura-1), transparent 70%), radial-gradient(36% 42% at 82% 18%, var(--aura-2), transparent 70%), radial-gradient(46% 40% at 62% 88%, var(--aura-3), transparent 70%);
-  filter: blur(28px); animation: ultra-drift 30s ease-in-out infinite alternate; }
-html[data-palette] body::after { content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .55; animation: ultra-twinkle 7s ease-in-out infinite alternate;
+html[data-palette]::before { content: ''; position: fixed; inset: -45%; z-index: -1; pointer-events: none; opacity: .16; will-change: transform;
+  background: conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(var(--v-rgb), .9) 55deg, transparent 120deg, rgba(var(--b-rgb), .8) 215deg, transparent 290deg);
+  animation: ultra-spin 90s linear infinite; }
+html[data-palette] body::before { content: ''; position: fixed; inset: -15%; z-index: -1; pointer-events: none; will-change: transform;
+  background: radial-gradient(42% 38% at 18% 24%, var(--aura-1), transparent 72%), radial-gradient(38% 44% at 82% 18%, var(--aura-2), transparent 72%), radial-gradient(48% 42% at 62% 88%, var(--aura-3), transparent 72%);
+  animation: ultra-drift 22s ease-in-out infinite alternate; }
+html[data-palette] body::after { content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .6;
   background-image: radial-gradient(1px 1px at 20px 30px, #fff, transparent), radial-gradient(1.5px 1.5px at 140px 90px, rgba(255,255,255,.85), transparent), radial-gradient(1px 1px at 310px 200px, #fff, transparent), radial-gradient(1.5px 1.5px at 450px 60px, rgba(255,255,255,.8), transparent), radial-gradient(1px 1px at 90px 260px, rgba(255,255,255,.9), transparent), radial-gradient(1px 1px at 400px 300px, #fff, transparent);
-  background-size: 520px 340px; }
+  background-size: 520px 340px; animation: ultra-stars 90s linear infinite, ultra-twinkle 6s ease-in-out infinite alternate; }
+html[data-palette] #root::before, html[data-palette] #root::after { content: ''; position: fixed; z-index: -1; pointer-events: none; border-radius: 50%; will-change: transform; }
+html[data-palette] #root::before { width: 46vmax; height: 46vmax; left: -10vmax; top: -12vmax; background: radial-gradient(circle at 38% 38%, rgba(var(--v-rgb), .5), rgba(var(--v-rgb), .12) 55%, transparent 70%); animation: ultra-orb-a 26s ease-in-out infinite alternate; }
+html[data-palette] #root::after { width: 38vmax; height: 38vmax; right: -8vmax; bottom: -10vmax; background: radial-gradient(circle at 60% 60%, rgba(var(--b-rgb), .48), rgba(236, 72, 153, .1) 55%, transparent 70%); animation: ultra-orb-b 32s ease-in-out infinite alternate; }
 html[data-palette][data-theme='light'] body::after { display: none; }
-@keyframes ultra-drift { from { transform: translate3d(-2%, -1%, 0) scale(1); } to { transform: translate3d(3%, 2%, 0) scale(1.08); } }
-@keyframes ultra-twinkle { from { opacity: .3; } to { opacity: .65; } }
-html[data-bg='stars'] body::before { animation: none; opacity: .55; }
-html[data-bg='plain'] body::before, html[data-bg='plain'] body::after { display: none; }
-.reduce-motion body::before, .reduce-motion body::after { animation: none !important; }
+html[data-palette][data-theme='light'] #root::before, html[data-palette][data-theme='light'] #root::after, html[data-palette][data-theme='light']::before { opacity: .45; }
+@keyframes ultra-spin { to { transform: rotate(360deg); } }
+@keyframes ultra-drift { from { transform: translate3d(-4%, -3%, 0) scale(1); } to { transform: translate3d(5%, 4%, 0) scale(1.12); } }
+@keyframes ultra-stars { to { background-position: 260px -340px; } }
+@keyframes ultra-twinkle { from { opacity: .3; } to { opacity: .7; } }
+@keyframes ultra-orb-a { from { transform: translate3d(0, 0, 0) scale(1); } to { transform: translate3d(34vw, 28vh, 0) scale(1.18); } }
+@keyframes ultra-orb-b { from { transform: translate3d(0, 0, 0) scale(1.1); } to { transform: translate3d(-32vw, -30vh, 0) scale(.92); } }
+html[data-bg='stars']::before, html[data-bg='stars'] body::before, html[data-bg='stars'] #root::before, html[data-bg='stars'] #root::after { display: none; }
+html[data-bg='plain']::before, html[data-bg='plain'] body::before, html[data-bg='plain'] body::after, html[data-bg='plain'] #root::before, html[data-bg='plain'] #root::after { display: none; }
+
+/* gentle floating cards (uses the separate `translate` property, so hover lift still works) */
+html[data-palette] .qa-card, html[data-palette] .suggest-card { animation: ui-float 7s ease-in-out infinite; }
+html[data-palette] .qa-card:nth-child(2), html[data-palette] .suggest-card:nth-child(2) { animation-delay: -1.8s; }
+html[data-palette] .qa-card:nth-child(3), html[data-palette] .suggest-card:nth-child(3) { animation-delay: -3.6s; }
+html[data-palette] .suggest-card:nth-child(4) { animation-delay: -5.2s; }
+@keyframes ui-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -5px; } }
+html[data-palette] .hero { animation: hero-glow 6s ease-in-out infinite alternate; }
+@keyframes hero-glow { from { box-shadow: 0 0 0 1px rgba(var(--v-rgb), .25), 0 10px 40px -18px rgba(var(--v-rgb), .35); } to { box-shadow: 0 0 0 1px rgba(var(--v-rgb), .5), 0 18px 60px -14px rgba(var(--v-rgb), .6); } }
+@media (max-width: 700px) { html[data-palette] #root::after { display: none; } }
+.reduce-motion::before, .reduce-motion body::before, .reduce-motion body::after, .reduce-motion #root::before, .reduce-motion #root::after, .reduce-motion .qa-card, .reduce-motion .suggest-card, .reduce-motion .hero { animation: none !important; }
 
 /* glass sidebar so the background glows through, like the concept */
 html[data-palette]:not([data-theme='light']) .sidebar { background: color-mix(in srgb, var(--bg-2) 72%, transparent); backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur)); border-right-color: rgba(var(--v-rgb), .2); }

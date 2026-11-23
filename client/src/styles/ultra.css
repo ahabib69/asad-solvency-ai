@@ -96,3 +96,7 @@ html[data-palette='lavender'] .hero-bg { filter: hue-rotate(12deg) saturate(.85)
 html[data-palette='midnight'] .hero-bg { filter: hue-rotate(-18deg) saturate(1.1); }
 @media (max-width: 700px) { .hero { --cx: 71%; } }
 .reduce-motion .hero-bg, .reduce-motion .hero::before, .reduce-motion .hero::after { animation: none !important; }
+
+/* ===== PERF FIX ===== */
+*,*::before,*::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;mix-blend-mode:normal!important;will-change:auto!important;animation-iteration-count:1!important}
+html{scroll-behavior:auto!important}

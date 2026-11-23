@@ -10,7 +10,6 @@ import MakeUseful from './pages/MakeUseful.jsx';
 import HistoryPage from './pages/History.jsx';
 import SettingsPage from './pages/Settings.jsx';
 import WebBrowser from './pages/WebBrowser.jsx';
-import Tools from './pages/Tools.jsx';
 
 export default function App() {
   return (
@@ -24,7 +23,6 @@ export default function App() {
           <Route path="/studio" element={<CreativeStudio />} />
           <Route path="/useful" element={<MakeUseful />} />
           <Route path="/browser" element={<WebBrowser />} />
-          <Route path="/tools" element={<Tools />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />

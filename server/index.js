@@ -10,7 +10,6 @@ import conversationRoutes from './routes/conversations.js';
 import imageRoutes from './routes/images.js';
 import voiceRoutes from './routes/voice.js';
 import browserRoutes from './routes/browser.js';
-import toolsRoutes from './routes/tools.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -43,7 +42,7 @@ const aiLimiter = (req, res, next) => {
   else if (++entry.n > config.rateLimitPerMin) return res.status(429).json({ error: 'Too many requests â€” please slow down for a minute.', code: 'rate_limited' });
   next();
 };
-app.use(['/api/chat', '/api/live', '/api/images/generate', '/api/images/enhance', '/api/tts', '/api/transcribe', '/api/tools', '/api/mystery'], aiLimiter);
+app.use(['/api/chat', '/api/live', '/api/images/generate', '/api/images/enhance', '/api/tts', '/api/transcribe'], aiLimiter);
 
 app.get('/api/health', (_req, res) => res.json({ ok: true, time: new Date().toISOString() }));
 app.get('/api/status', (_req, res) => res.json(status()));
@@ -52,7 +51,6 @@ app.use('/api', conversationRoutes);
 app.use('/api', imageRoutes);
 app.use('/api', voiceRoutes);
 app.use('/api', browserRoutes);
-app.use('/api', toolsRoutes);
 app.use('/generated', express.static(IMAGES_DIR, { maxAge: '7d' }));
 app.use('/api', (_req, res) => res.status(404).json({ error: 'Unknown API route' }));
 
